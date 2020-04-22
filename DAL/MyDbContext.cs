@@ -11,7 +11,7 @@ namespace DAL
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
-        public MyDbContext(DbContextOptions options) : base(options) 
+        public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) 
         {
             Database.EnsureCreated();
         }

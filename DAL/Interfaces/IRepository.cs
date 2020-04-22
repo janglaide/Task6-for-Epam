@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
-        T Get(int id);
-        void Add(T item);
+        ValueTask<T> GetAsync(int id);
+        Task<IEnumerable<T>> GetAllAsync();
+        Task AddAsync(T item);
 
     }
 }

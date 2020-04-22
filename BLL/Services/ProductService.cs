@@ -1,43 +1,43 @@
 ﻿using AutoMapper;
-using BLL.DTOs;
 using DAL.Entities;
 using DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using BLL.Interfaces;
+using System.Threading.Tasks;
 
 namespace BLL.Services
 {
-    public class ProductService : IService<ProductDTO>
+    public class ProductService : IProductService
     {
         private IUnitOfWork _uow;
         public ProductService(IUnitOfWork unitOfWork)
         {
             _uow = unitOfWork;
         }
-        public void Add(ProductDTO item)
+
+        public async Task<Product> Add(Product item)
         {
-            var newItem = new Product
-            {
-                Id = item.Id,
-                Name = item.Name,
-                Price = item.Price
-            };
-            _uow.Products.Add(newItem);
-            _uow.Save();
+            await _uow.Products.AddAsync(item);
+            await _uow.CommitAsync();
+            return item;
         }
 
-        public ProductDTO Get(int id)
+        public async Task<Product> Get(int id)
         {
-            var mapper = new MapperConfiguration(x => x.CreateMap<Product, ProductDTO>()).CreateMapper();
-            return mapper.Map<Product, ProductDTO>(_uow.Products.Get(id));
+            return await _uow.Products.GetAsync(id);
         }
 
-        public IEnumerable<ProductDTO> GetAll()
+        public async Task<IEnumerable<Product>> GetAll()
         {
-            var mapper = new MapperConfiguration(x => x.CreateMap<Product, ProductDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(_uow.Products.GetAll());
+            return await _uow.Products.GetAllAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetAllByOrderAsync(int orderId)
+        {
+            return await _uow.Products.GetAllByOrderAsync(orderId);
         }
     }
 }

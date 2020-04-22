@@ -3,15 +3,16 @@ using DAL.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Order> Orders { get; }
-        IRepository<OrderDetails> OrderDetails { get; }
-        IRepository<Product> Products { get;}
+        IOrderRepository Orders { get; }
+        IOrderDetailsRepository OrderDetails { get; }
+        IProductRepository Products { get;}
+        Task<int> CommitAsync();
         void Dispose(bool disposing);
-        void Save();
     }
 }

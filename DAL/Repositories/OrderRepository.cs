@@ -3,30 +3,12 @@ using DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class OrderRepository : IRepository<Order>
+    public class OrderRepository : Repository<Order>, IOrderRepository
     {
-        private MyDbContext db;
-        public OrderRepository(MyDbContext myDbContext)
-        {
-            db = myDbContext;
-        }
-        public void Add(Order item)
-        {
-            db.Orders.Add(item);
-            db.SaveChanges();
-        }
-
-        public Order Get(int id)
-        {
-            return db.Orders.Find(id);
-        }
-
-        public IEnumerable<Order> GetAll()
-        {
-            return db.Orders;
-        }
+        public OrderRepository(MyDbContext context) : base(context) { }
     }
 }

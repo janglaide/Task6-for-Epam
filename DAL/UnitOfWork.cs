@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DAL
 {
@@ -13,50 +14,19 @@ namespace DAL
         private MyDbContext _dbContext;
         private bool _disposed;
 
-        private IRepository<Order> _orderRepository;
-        private IRepository<OrderDetails> _orderdetailsRepository;
-        private IRepository<Product> _productsRepository;
-        public UnitOfWork(string connection)
+        private IOrderRepository _orderRepository;
+        private IOrderDetailsRepository _orderdetailsRepository;
+        private IProductRepository _productsRepository;
+        public UnitOfWork(MyDbContext context)
         {
-            var optionsBuilder = new DbContextOptionsBuilder<MyDbContext>();
-            var options = optionsBuilder
-                .UseSqlServer(connection)
-                .Options;
-            _dbContext = new MyDbContext(options);
+            _dbContext = context;
             _disposed = false;
         }
 
-        public IRepository<Order> Orders 
-        {
-            get
-            {
-                if (_orderRepository == null)
-                    _orderRepository = new OrderRepository(_dbContext);
-                return _orderRepository;
-            }
-        }
-        public IRepository<OrderDetails> OrderDetails 
-        { 
-            get
-            {
-                if (_orderdetailsRepository == null)
-                    _orderdetailsRepository = new OrderDetailsRepository(_dbContext);
-                return _orderdetailsRepository;
-            }
-        }
-        public IRepository<Product> Products 
-        { 
-            get
-            {
-                if (_productsRepository == null)
-                    _productsRepository = new ProductRepository(_dbContext);
-                return _productsRepository;
-            }
-        }
-        public void Save()
-        {
-            _dbContext.SaveChanges();
-        }
+        public IOrderRepository Orders => _orderRepository ??= new OrderRepository(_dbContext);
+        public IOrderDetailsRepository OrderDetails => _orderdetailsRepository ??= new OrderDetailsRepository(_dbContext);
+        public IProductRepository Products => _productsRepository ??= new ProductRepository(_dbContext); 
+
         public virtual void Dispose(bool disposing)
         {
             if (!_disposed)
@@ -70,6 +40,11 @@ namespace DAL
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public async Task<int> CommitAsync()
+        {
+            return await _dbContext.SaveChangesAsync();
         }
     }
 }

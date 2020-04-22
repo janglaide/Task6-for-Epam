@@ -1,32 +1,21 @@
 ﻿using DAL.Entities;
 using DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class ProductRepository : IRepository<Product>
+    public class ProductRepository : Repository<Product>, IProductRepository
     {
-        private MyDbContext db;
-        public ProductRepository(MyDbContext myDbContext)
-        {
-            db = myDbContext;
-        }
-        public void Add(Product item)
-        {
-            db.Products.Add(item);
-            db.SaveChanges();
-        }
+        public ProductRepository(MyDbContext context) : base(context) { }
 
-        public Product Get(int id)
+        public Task<IEnumerable<Product>> GetAllByOrderAsync(int orderId)
         {
-            return db.Products.Find(id);
-        }
-
-        public IEnumerable<Product> GetAll()
-        {
-            return db.Products;
+            throw new NotImplementedException();
         }
     }
 }

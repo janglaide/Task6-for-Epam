@@ -1,42 +1,38 @@
 ﻿using AutoMapper;
 using BLL.DTOs;
+using BLL.Interfaces;
 using DAL.Entities;
 using DAL.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BLL.Services
 {
-    public class OrderDetailsService : IService<OrderDetailsDTO>
+    public class OrderDetailsService : IOrderDetailsService
     {
         private IUnitOfWork _uow;
         public OrderDetailsService(IUnitOfWork unitOfWork)
         {
             _uow = unitOfWork;
         }
-        public void Add(OrderDetailsDTO item)
+
+        public async Task<OrderDetails> Add(OrderDetails item)
         {
-            var newItem = new OrderDetails
-            {
-                Id = item.Id,
-                OrderId = item.OrderId,
-                ProductId = item.ProductId
-            };
-            _uow.OrderDetails.Add(newItem);
-            _uow.Save();
+            await _uow.OrderDetails.AddAsync(item);
+            await _uow.CommitAsync();
+            return item;
         }
 
-        public OrderDetailsDTO Get(int id)
+        public async Task<OrderDetails> Get(int id)
         {
-            var mapper = new MapperConfiguration(x => x.CreateMap<OrderDetails, OrderDetailsDTO>()).CreateMapper();
-            return mapper.Map<OrderDetails, OrderDetailsDTO>(_uow.OrderDetails.Get(id));
+            return await _uow.OrderDetails.GetAsync(id);
         }
 
-        public IEnumerable<OrderDetailsDTO> GetAll()
+        public async Task<IEnumerable<OrderDetails>> GetAll()
         {
-            var mapper = new MapperConfiguration(x => x.CreateMap<OrderDetails, OrderDetailsDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<OrderDetails>, IEnumerable<OrderDetailsDTO>>(_uow.OrderDetails.GetAll());
+            return await _uow.OrderDetails.GetAllAsync();
         }
     }
 }
