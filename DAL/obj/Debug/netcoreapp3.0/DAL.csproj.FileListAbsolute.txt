@@ -1,0 +1,5 @@
+C:\Users\Alisa\Documents\epam\Task6\DAL\bin\Debug\netcoreapp3.0\DAL.deps.json
+C:\Users\Alisa\Documents\epam\Task6\DAL\bin\Debug\netcoreapp3.0\DAL.dll
+C:\Users\Alisa\Documents\epam\Task6\DAL\obj\Debug\netcoreapp3.0\DAL.csprojAssemblyReference.cache
+C:\Users\Alisa\Documents\epam\Task6\DAL\obj\Debug\netcoreapp3.0\DAL.AssemblyInfoInputs.cache
+C:\Users\Alisa\Documents\epam\Task6\DAL\obj\Debug\netcoreapp3.0\DAL.AssemblyInfo.cs
