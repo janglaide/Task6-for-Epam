@@ -27,7 +27,7 @@ namespace API
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -35,15 +35,14 @@ namespace API
             services.AddControllers();
 
             services.AddDbContext<MyDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("Default"),
-                x => x.MigrationsAssembly("MyProducts.Data"))
-                );
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Default")).EnableSensitiveDataLogging();
+            });
 
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-            services.AddTransient<IOrderService, OrderService>();
-            services.AddTransient<IOrderDetailsService, OrderDetailsService>();
-            services.AddTransient<IProductService, ProductService>();
+            services.AddScoped<IOrderDetailsService, OrderDetailsService>();
 
             services.AddSwaggerGen(options =>
             {

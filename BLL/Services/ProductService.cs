@@ -7,37 +7,34 @@ using System.Text;
 using System.Linq;
 using BLL.Interfaces;
 using System.Threading.Tasks;
+using BLL.DTOs;
 
 namespace BLL.Services
 {
     public class ProductService : IProductService
     {
         private IUnitOfWork _uow;
+        private IMapper _mapper;
         public ProductService(IUnitOfWork unitOfWork)
         {
             _uow = unitOfWork;
+            _mapper = new MapperConfiguration(x => x.CreateMap<Product, ProductDTO>()).CreateMapper();
         }
 
-        public async Task<Product> Add(Product item)
+        public async Task<IEnumerable<ProductDTO>> GetAll()
         {
-            await _uow.Products.AddAsync(item);
-            await _uow.CommitAsync();
-            return item;
+            var orders = await _uow.Products.GetAllAsync();
+            return _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(orders);
         }
 
-        public async Task<Product> Get(int id)
+        /*public Task<IEnumerable<Product>> GetAllByOrderAsync(int orderId)
         {
-            return await _uow.Products.GetAsync(id);
+            throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<Product>> GetAll()
+        public Task<ProductDTO> GetProductById(int id)
         {
-            return await _uow.Products.GetAllAsync();
-        }
-
-        public async Task<IEnumerable<Product>> GetAllByOrderAsync(int orderId)
-        {
-            return await _uow.Products.GetAllByOrderAsync(orderId);
-        }
+            throw new NotImplementedException();
+        }*/
     }
 }

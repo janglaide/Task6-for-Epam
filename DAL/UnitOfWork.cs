@@ -12,7 +12,6 @@ namespace DAL
     public class UnitOfWork : IUnitOfWork
     {
         private MyDbContext _dbContext;
-        private bool _disposed;
 
         private IOrderRepository _orderRepository;
         private IOrderDetailsRepository _orderdetailsRepository;
@@ -20,26 +19,15 @@ namespace DAL
         public UnitOfWork(MyDbContext context)
         {
             _dbContext = context;
-            _disposed = false;
         }
 
         public IOrderRepository Orders => _orderRepository ??= new OrderRepository(_dbContext);
         public IOrderDetailsRepository OrderDetails => _orderdetailsRepository ??= new OrderDetailsRepository(_dbContext);
         public IProductRepository Products => _productsRepository ??= new ProductRepository(_dbContext); 
 
-        public virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
-            {
-                if (disposing)
-                    _dbContext.Dispose();
-                _disposed = true;
-            }
-        }
         public void Dispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            _dbContext.Dispose();
         }
 
         public async Task<int> CommitAsync()

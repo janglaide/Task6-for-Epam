@@ -13,7 +13,7 @@ namespace DAL
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public MyDbContext(DbContextOptions<MyDbContext> options) : base(options) 
         {
-            Database.EnsureCreated();
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

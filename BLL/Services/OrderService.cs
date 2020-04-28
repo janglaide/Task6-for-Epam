@@ -13,26 +13,23 @@ namespace BLL.Services
     public class OrderService : IOrderService
     {
         private IUnitOfWork _uow;
+        private IMapper _mapper;
         public OrderService(IUnitOfWork unitOfWork)
         {
             _uow = unitOfWork;
+            _mapper = new MapperConfiguration(x => x.CreateMap<Order, OrderDTO>()).CreateMapper();
         }
 
-        public async Task<Order> Add(Order item)
+        public async Task<IEnumerable<OrderDTO>> GetAll()
         {
-            await _uow.Orders.AddAsync(item);
-            await _uow.CommitAsync();
-            return item;
+            var orders = await _uow.Orders.GetAllAsync();
+            return _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(orders);
         }
 
-        public async Task<Order> Get(int id)
+        /*public Task<OrderDTO> GetOrderById(int id)
         {
-            return await _uow.Orders.GetAsync(id);
-        }
-
-        public async Task<IEnumerable<Order>> GetAll()
-        {
-            return await _uow.Orders.GetAllAsync();
-        }
+            var orders = await _uow.Orders.
+            return _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(orders);
+        }*/
     }
 }

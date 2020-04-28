@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Models;
 using AutoMapper;
+using BLL.DTOs;
 using BLL.Interfaces;
 using DAL.Entities;
 using Microsoft.AspNetCore.Http;
@@ -15,16 +17,18 @@ namespace API.Controllers
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
-        public OrderController(IOrderService orderService, IMapper mapper)
+        private readonly IMapper _mapper;
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
+            _mapper = new MapperConfiguration(x => x.CreateMap<OrderDTO, OrderModel>()).CreateMapper();
         }
 
-        [HttpGet("")]
-        public async Task<ActionResult<IEnumerable<Order>>> GetAllOrders()
+        [HttpGet]
+        public async Task<IEnumerable<OrderModel>> GetAllOrders()
         {
-            var orders = await _orderService.GetAll();
-            return Ok(orders);
+            var orderDTOs = await _orderService.GetAll();
+            return _mapper.Map<IEnumerable<OrderDTO>, IEnumerable<OrderModel>>(orderDTOs);
         }
     }
 }

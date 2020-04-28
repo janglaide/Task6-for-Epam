@@ -13,6 +13,5 @@ namespace DAL.Interfaces
         IOrderDetailsRepository OrderDetails { get; }
         IProductRepository Products { get;}
         Task<int> CommitAsync();
-        void Dispose(bool disposing);
     }
 }
