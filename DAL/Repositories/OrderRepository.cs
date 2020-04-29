@@ -10,5 +10,10 @@ namespace DAL.Repositories
     public class OrderRepository : Repository<Order>, IOrderRepository
     {
         public OrderRepository(MyDbContext context) : base(context) { }
+
+        public IEnumerable<Order> GetAll()
+        {
+            return context.Orders;
+        }
     }
 }

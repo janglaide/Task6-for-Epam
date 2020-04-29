@@ -19,6 +19,9 @@ namespace DAL
         public UnitOfWork(MyDbContext context)
         {
             _dbContext = context;
+            _orderdetailsRepository = new OrderDetailsRepository(context);
+            _orderRepository = new OrderRepository(context);
+            _productsRepository = new ProductRepository(context);
         }
 
         public IOrderRepository Orders => _orderRepository ??= new OrderRepository(_dbContext);

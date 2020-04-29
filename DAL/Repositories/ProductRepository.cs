@@ -13,6 +13,11 @@ namespace DAL.Repositories
     {
         public ProductRepository(MyDbContext context) : base(context) { }
 
+        public IEnumerable<Product> GetAll()
+        {
+            return context.Products;
+        }
+
         public Task<IEnumerable<Product>> GetAllByOrderAsync(int orderId)
         {
             throw new NotImplementedException();

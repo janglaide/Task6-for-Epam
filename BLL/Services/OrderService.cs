@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace BLL.Services
 {
@@ -20,16 +22,36 @@ namespace BLL.Services
             _mapper = new MapperConfiguration(x => x.CreateMap<Order, OrderDTO>()).CreateMapper();
         }
 
-        public async Task<IEnumerable<OrderDTO>> GetAll()
+        public IEnumerable<OrderDTO> GetAll()
+        {
+            return _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(_uow.Orders.GetAll());
+        }
+
+        public async Task<IEnumerable<OrderDTO>> GetAllAsync()
         {
             var orders = await _uow.Orders.GetAllAsync();
             return _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(orders);
         }
 
-        /*public Task<OrderDTO> GetOrderById(int id)
+        public async Task<OrderDTO> GetOrderById(int id)
         {
-            var orders = await _uow.Orders.
-            return _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(orders);
-        }*/
+            var order = await _uow.Orders.GetAsync(id);
+            return _mapper.Map<Order, OrderDTO>(order);
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetProductsByOrderId(int id)
+        {
+            var products = await _uow.Products.GetAllAsync();
+            var orderDetails = await _uow.OrderDetails.GetAllAsync();
+            var list = products.Join(orderDetails, p => p.Id, od => od.ProductId,
+                (p, od) => new { p.Id, p.Name, p.Price, od.OrderId })
+                .Where(x => x.OrderId == id);
+            var res = new List<ProductDTO>();
+            foreach(var x in list)
+            {
+                res.Add(new ProductDTO { Id = x.Id, Name = x.Name, Price = x.Price });
+            }
+            return res;
+        }
     }
 }

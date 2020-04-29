@@ -9,7 +9,8 @@ namespace BLL.Interfaces
 {
     public interface IOrderDetailsService 
     {
-        Task<IEnumerable<OrderDetailsDTO>> GetAll();
+        Task<IEnumerable<OrderDetailsDTO>> GetAllAsync();
+        IEnumerable<OrderDetailsDTO> GetAll();
 
     }
 }

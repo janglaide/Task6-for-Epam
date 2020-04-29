@@ -19,14 +19,15 @@ namespace DAL.Repositories
             await context.Set<T>().AddAsync(item);
         }
 
+
         public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await context.Set<T>().ToListAsync();
         }
 
-        public ValueTask<T> GetAsync(int id)
+        public async Task<T> GetAsync(int id)
         {
-            return context.Set<T>().FindAsync(id);
+            return await context.Set<T>().FindAsync(id);
         }
     }
 }

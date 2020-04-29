@@ -13,5 +13,9 @@ namespace DAL.Repositories
     {
         public OrderDetailsRepository(MyDbContext myDbContext) : base(myDbContext) { }
 
+        public IEnumerable<OrderDetails> GetAll()
+        {
+            return context.Set<OrderDetails>().ToList();
+        }
     }
 }

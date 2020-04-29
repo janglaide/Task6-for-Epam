@@ -9,5 +9,6 @@ namespace DAL.Interfaces
     public interface IProductRepository : IRepository<Product>
     {
         Task<IEnumerable<Product>> GetAllByOrderAsync(int orderId);
+        IEnumerable<Product> GetAll();
     }
 }

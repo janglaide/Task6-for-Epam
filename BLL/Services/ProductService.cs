@@ -21,7 +21,12 @@ namespace BLL.Services
             _mapper = new MapperConfiguration(x => x.CreateMap<Product, ProductDTO>()).CreateMapper();
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetAll()
+        public IEnumerable<ProductDTO> GetAll()
+        {
+            return _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(_uow.Products.GetAll());
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetAllAsync()
         {
             var orders = await _uow.Products.GetAllAsync();
             return _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(orders);

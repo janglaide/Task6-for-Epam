@@ -27,8 +27,25 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IEnumerable<OrderModel>> GetAllOrders()
         {
-            var orderDTOs = await _orderService.GetAll();
+            var orderDTOs = await _orderService.GetAllAsync();
             return _mapper.Map<IEnumerable<OrderDTO>, IEnumerable<OrderModel>>(orderDTOs);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<OrderModel> GetOrderById(int id)
+        {
+            var order = await _orderService.GetOrderById(id);
+            return _mapper.Map<OrderDTO, OrderModel>(order);
+        }
+
+        [HttpGet("{id}/products")]
+        public async Task<IEnumerable<ProductModel>> GetProductsByOrderId(int id)
+        {
+            var products = await _orderService.GetProductsByOrderId(id);
+
+            var map = new MapperConfiguration(x => x.CreateMap<ProductDTO, ProductModel>()).CreateMapper();
+            var x = map.Map<IEnumerable<ProductDTO>, IEnumerable<ProductModel>>(products);
+            return x;
         }
     }
 }

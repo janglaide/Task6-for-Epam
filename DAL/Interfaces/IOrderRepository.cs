@@ -8,5 +8,6 @@ namespace DAL.Interfaces
 {
     public interface IOrderRepository : IRepository<Order>
     {
+        IEnumerable<Order> GetAll();
     }
 }

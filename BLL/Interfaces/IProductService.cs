@@ -9,7 +9,8 @@ namespace BLL.Interfaces
 {
     public interface IProductService 
     {
-        Task<IEnumerable<ProductDTO>> GetAll();
+        Task<IEnumerable<ProductDTO>> GetAllAsync();
+        IEnumerable<ProductDTO> GetAll();
         //Task<ProductDTO> GetProductById(int id);
         //Task<IEnumerable<Product>> GetAllByOrderAsync(int orderId);
     }
