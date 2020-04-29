@@ -11,8 +11,8 @@ namespace BLL.Interfaces
     {
         Task<IEnumerable<OrderDTO>> GetAllAsync();
         Task<OrderDTO> GetOrderById(int id);
-
         Task<IEnumerable<ProductDTO>> GetProductsByOrderId(int id);
-        IEnumerable<OrderDTO> GetAll();
+        Task AddOrder(OrderDTO orderDTO);
+        Task AddProductToOrder(OrderDetailsDTO orderDetailsDTO);
     }
 }

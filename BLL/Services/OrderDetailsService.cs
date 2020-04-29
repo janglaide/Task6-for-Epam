@@ -20,6 +20,15 @@ namespace BLL.Services
             _mapper = new MapperConfiguration(x => x.CreateMap<OrderDetails, OrderDetailsDTO>()).CreateMapper();
         }
 
+        public async Task AddProductDetails(OrderDetailsDTO orderDetailsDTO)
+        {
+            var mapper = new MapperConfiguration(x => x.CreateMap<OrderDetailsDTO, OrderDetails>()).CreateMapper();
+            var orderDetails = mapper.Map<OrderDetailsDTO, OrderDetails>(orderDetailsDTO);
+
+            await _uow.OrderDetails.AddAsync(orderDetails);
+            await _uow.CommitAsync();
+        }
+
         public IEnumerable<OrderDetailsDTO> GetAll()
         {
             var orderDetails = _uow.OrderDetails.GetAll();

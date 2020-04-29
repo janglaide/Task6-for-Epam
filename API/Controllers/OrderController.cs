@@ -47,5 +47,27 @@ namespace API.Controllers
             var x = map.Map<IEnumerable<ProductDTO>, IEnumerable<ProductModel>>(products);
             return x;
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddOrder(OrderModel orderModel)
+        {
+            var tmpDateTime = Convert.ToDateTime(orderModel.OrderDate);
+            var orderDTO = new OrderDTO { OrderDate = tmpDateTime };
+
+            await _orderService.AddOrder(orderDTO);
+            return NoContent();
+        }
+        [HttpPut("{id}/products")]
+        public async Task<IActionResult> AddProductToOrder(int id, OrderDetailsModel orderDetailsModel)
+        {
+            if (id != orderDetailsModel.OrderId)
+                return BadRequest();
+
+            var mapper = new MapperConfiguration(x => x.CreateMap<OrderDetailsModel, OrderDetailsDTO>()).CreateMapper();
+            var orderDetailsDTO = mapper.Map<OrderDetailsModel, OrderDetailsDTO>(orderDetailsModel);
+
+            await _orderService.AddProductToOrder(orderDetailsDTO);
+            return NoContent();
+        }
     }
 }

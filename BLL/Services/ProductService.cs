@@ -21,9 +21,13 @@ namespace BLL.Services
             _mapper = new MapperConfiguration(x => x.CreateMap<Product, ProductDTO>()).CreateMapper();
         }
 
-        public IEnumerable<ProductDTO> GetAll()
+        public async Task AddProduct(ProductDTO productDTO)
         {
-            return _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(_uow.Products.GetAll());
+            var mapper = new MapperConfiguration(x => x.CreateMap<ProductDTO, Product>()).CreateMapper();
+            var product = mapper.Map<ProductDTO, Product>(productDTO);
+
+            await _uow.Products.AddAsync(product);
+            await _uow.CommitAsync();
         }
 
         public async Task<IEnumerable<ProductDTO>> GetAllAsync()
@@ -32,14 +36,5 @@ namespace BLL.Services
             return _mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(orders);
         }
 
-        /*public Task<IEnumerable<Product>> GetAllByOrderAsync(int orderId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<ProductDTO> GetProductById(int id)
-        {
-            throw new NotImplementedException();
-        }*/
     }
 }

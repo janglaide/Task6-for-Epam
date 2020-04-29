@@ -16,7 +16,7 @@ namespace DAL.Repositories
         }
         public async Task AddAsync(T item)
         {
-            await context.Set<T>().AddAsync(item);
+            await context.Set<T>().AddAsync(item);  
         }
 
 

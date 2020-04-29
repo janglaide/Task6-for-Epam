@@ -22,6 +22,21 @@ namespace BLL.Services
             _mapper = new MapperConfiguration(x => x.CreateMap<Order, OrderDTO>()).CreateMapper();
         }
 
+        public async Task AddOrder(OrderDTO orderDTO)
+        {
+            var mapper = new MapperConfiguration(x => x.CreateMap<OrderDTO, Order>()).CreateMapper();
+            var order = mapper.Map<OrderDTO, Order>(orderDTO);
+
+            await _uow.Orders.AddAsync(order);
+            await _uow.CommitAsync();
+        }
+
+        public async Task AddProductToOrder(OrderDetailsDTO orderDetailsDTO)
+        {
+            var orderDetailsService = new OrderDetailsService(_uow);
+            await orderDetailsService.AddProductDetails(orderDetailsDTO);
+        }
+
         public IEnumerable<OrderDTO> GetAll()
         {
             return _mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(_uow.Orders.GetAll());
@@ -43,6 +58,7 @@ namespace BLL.Services
         {
             var products = await _uow.Products.GetAllAsync();
             var orderDetails = await _uow.OrderDetails.GetAllAsync();
+
             var list = products.Join(orderDetails, p => p.Id, od => od.ProductId,
                 (p, od) => new { p.Id, p.Name, p.Price, od.OrderId })
                 .Where(x => x.OrderId == id);

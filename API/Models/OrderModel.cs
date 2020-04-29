@@ -7,8 +7,6 @@ namespace API.Models
 {
     public class OrderModel
     {
-        public int Id { get; set; }
-        public DateTime OrderDate { get; set; }
-        public ICollection<OrderDetailsModel> OrderDetails { get; set; }
+        public string OrderDate { get; set; }
     }
 }
